@@ -15,48 +15,31 @@ function App() {
   const [email, setEmail] = useState("");
 
   
-  const [cookies, setCookie] = useCookies(['user']);
+  const [cookies, setCookie, removeCookie] = useCookies(['email']);
 
 
 
   //runs on reload
   useEffect(() => {
-    
 
-    
+    //checking for email
+    if (cookies["email"] != undefined) {
+      setEmail(cookies["email"])
+    }
     //getting all data
     axios.get(
       "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/products", {
       })
       .then(function (response) {
         setProducts(response["data"]["products"]["Items"]);
-        console.log(response["data"]["products"]["Items"])
-        console.log("got data")
       })
-      
-      //if localStorage.getItem('emailAdress')
-      setCookie('Email', email, { path: '/' });
-      const cookie = localStorage.getItem('emailAdress')
-      console.log("Cookie: ", cookie)
-      console.log("Email : ",email)
-      if (cookie != null){
-        console.log("settting cookie to: " ,cookie)
-        setEmail(cookie)
-      }
     }, [])
 
-
-
-    //semi-persistant email search
+    //cookies for storing email of the user
     const setCookieFunction = (value) => {
-      console.log("setting cookie", value)
-      setEmail(value)
-      console.log("Email: ", email)
-      if (email.length > 3){
-        console.log(email.slice(-4))
-        if (email.slice(-4) === "."){}
-      }
-      localStorage.setItem( 'emailAddress', email)
+        //if (cookies["email"] === undefined){
+          setCookie("email",value);
+        //}
     }
 
   return (
