@@ -2,7 +2,7 @@ import React from 'react'
 
 const product = (props) => {
     if (props.prod == null) {
-        return (<h1>Please enter an existing email account</h1>)
+        return
     } else {
         return (
             <div className="flex justify-center p-5 w-62 bg-slate-200 rounded-lg shadow-lg">
