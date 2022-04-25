@@ -12,13 +12,10 @@ import CreateProductForm from "./components/CreateProductForm";
 
 function App() {
 
-
   const [products, setProducts] = useState([]);
   const [email, setEmail] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(['email']);
   const [loggedIn, setLogin] = useState(false);
-  
-
   //runs on reload
   useEffect(() => {
 
@@ -35,7 +32,7 @@ function App() {
         setProducts(response["data"]["products"]["Items"]);
       })
     }, [cookies])
- 
+
     //cookies for storing email of the user
     const setCookieFunction = (value) => {
       setLogin(true)
@@ -45,7 +42,12 @@ function App() {
 
     const postProduct = (value) => {
       axios.post (
-        "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/product", value
+        "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/product", {
+          "id": value["id"],
+          "ownerEmail": email,
+          "price": value["price"],
+          "color": value["color"]
+        }
       )
     }
 
