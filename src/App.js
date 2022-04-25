@@ -3,15 +3,16 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import MyForm from "./components/MyForm";
 import { useCookies } from 'react-cookie';
-import CreateProductForm from "./components/createProductForm";
-
-
+import CreateProductForm from "./components/CreateProductForm";
+import SignUp from "./components/SignUp";
+import Login from "./components/Login";
+import {Account} from "./components/Account";
+import Status from "./components/Status";
 
 
 
 
 function App() {
-
   const [products, setProducts] = useState([]);
   const [email, setEmail] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(['email']);
@@ -51,6 +52,17 @@ function App() {
       )
     }
 
+    const deleteProduct = (e) => {
+      console.log("deleting", e)
+      axios.delete(
+        "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/product" + "", {
+          "id": e,
+          "ownerEmail": email
+        }
+      )
+      return false;
+    }
+
     const getNewObject = (e) => {
       e["email"] = email
       console.log(e)
@@ -62,16 +74,25 @@ function App() {
       removeCookie("email")
       setEmail(undefined)
     }
-    const renderForm = () => {
-      if (loggedIn === false){
-        return <MyForm setEmail={setCookieFunction}/>
-      } else {
-        return <button onClick={handleLogout}>logout</button>
-      }
-    };
 
     const uploadImage = (e) => {
       console.log(e.target.file["name"]);
+    }
+
+    const renderAuthComponentns = () => {
+      console.log(email)
+      if (email === null ||email === undefined || email === "" || email === "null") {
+          console.log("rendering Logged out view")
+          return (
+          <Account getUser={setCookieFunction} className="flex justify-items-center">
+            <Login className="flex"/>
+            <SignUp/> <Status />
+          </Account>)
+      } else {
+        console.log("rendering logged in view")
+        return (<><CreateProductForm sendData={getNewObject}/><Account getUser={setCookieFunction}><Status/></Account></>)
+      }
+      
     }
 
   return (
@@ -81,23 +102,22 @@ function App() {
             myStore
         </h1>
       </header>
-        <div className="w-screen py-10 h-10 flex justify-center bg-slate-600 ">
-          {renderForm()}
+        <div className="">
          
         </div>
-        <div className="bg-slate-400 flex justify-center">
+        <div>
+        <div className="py-5">
           {products.map((product, index) => (
-            <Product key={index} prod={product["ownerEmail"] === email ? product: null} />
+            <div className="flex justify-center py-1">
+              <Product key={index} delete={deleteProduct} prod={product["ownerEmail"] === email ? product: null} />
+            </div>
           ))}
+          </div>
         </div>
 
-        <div>
-          <input type="file" onChange={uploadImage}>
-          </input>
-          <CreateProductForm sendData={getNewObject}/>
-        </div>
 
-        <div>
+        <div className=" py-10 flex justify-center">
+            {renderAuthComponentns()}
         </div>
     </div>
   );

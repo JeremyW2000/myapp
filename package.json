@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-amplify/ui-react": "^2.15.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
+    "amazon-cognito-identity-js": "^5.2.8",
+    "aws-amplify": "^4.3.20",
     "axios": "^0.26.1",
     "react": "^18.0.0",
     "react-aws-s3": "^1.5.0",

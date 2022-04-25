@@ -15,12 +15,15 @@ export default function CreateProductForm(props) {
         props.sendData(object)
     }
     const getID = (e) => {
+        e.preventDefault();
     setID(e.target.value);
     }
     const getPrice = (e) => {
+        e.preventDefault();
     setPrice(e.target.value);
     }
     const getColor = (e) => {
+        e.preventDefault();
         setColor(e.target.value);
     }
   return (

@@ -5,11 +5,12 @@ export default function MyForm(props){
   const [emailField, setEmailField] = useState("");
 
   const handleSubmit  = (e) => {
-    // if (e && e.preventDefault()){e.preventDefault();}
+    e.preventDefault();
     props.setEmail(emailField);
   }
   
   const getInputValue = (event)=>{
+    // event.preventDefault();
     const val = event.target.value;
     setEmailField(val);
   };
