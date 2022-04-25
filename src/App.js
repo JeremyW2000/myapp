@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import MyForm from "./components/MyForm";
 import { useCookies } from 'react-cookie';
-import S3 from 'react-aws-s3';
 import CreateProductForm from "./components/CreateProductForm";
 
 
@@ -13,35 +12,18 @@ import CreateProductForm from "./components/CreateProductForm";
 
 function App() {
 
-  //s3 config
-  const config = {
-    bucketName: 'myBucket',
-    dirName: 'media', /* optional */
-    region: 'eu-west-1',
-    accessKeyId: 'JAJHAFJFHJDFJSDHFSDHFJKDSF',
-    secretAccessKey: 'jhsdf99845fd98qwed42ebdyeqwd-3r98f373f=qwrq3rfr3rf',
-    s3Url: 'https:/your-custom-s3-url.com/', /* optional */
-  }
-
-  const ReactS3Client = new S3(config);
-  const newFileName = 'test-file';
 
   const [products, setProducts] = useState([]);
   const [email, setEmail] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(['email']);
   const [loggedIn, setLogin] = useState(false);
   
-  
-  // ReactS3Client
-  //   .uploadFile(file, newFileName)
-  //   .then(data => console.log(data))
-  //   .catch(err => console.error(err))
 
   //runs on reload
   useEffect(() => {
 
     //checking for email
-    if (cookies["email"] != undefined) {
+    if (cookies["email"] !== undefined) {
       setEmail(cookies["email"])
     }
 
@@ -52,7 +34,7 @@ function App() {
       .then(function (response) {
         setProducts(response["data"]["products"]["Items"]);
       })
-    }, [])
+    }, [cookies])
 
     //cookies for storing email of the user
     const setCookieFunction = (value) => {
