@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import MyForm from "./components/MyForm";
 import { useCookies } from 'react-cookie';
-import CreateProductForm from "./components/CreateProductForm";
+import CreateProductForm from "./components/createProductForm";
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import {Account} from "./components/Account";
