@@ -35,7 +35,7 @@ function App() {
         setProducts(response["data"]["products"]["Items"]);
       })
     }, [cookies])
-
+ 
     //cookies for storing email of the user
     const setCookieFunction = (value) => {
       setLogin(true)
