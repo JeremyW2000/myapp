@@ -10,7 +10,6 @@ const Login = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();  
-
         authenticate(email, password )
         .then((data) => {
             console.log("logged in", data);

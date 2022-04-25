@@ -3,14 +3,15 @@ import React, { useState } from 'react'
 export default function CreateProductForm(props) {
     const [price, setPrice] = useState(0);
     const [id, setID] = useState("");
-    const [color, setColor] = useState("");
+    const [description, setDescription] = useState("");
 
     const sendData = (e) => {
         e.preventDefault();
         let object = {
             "id" : id,
             "price" : price,
-            "colour" : color,
+            "description" : description,
+
         }
         props.sendData(object)
     }
@@ -22,17 +23,20 @@ export default function CreateProductForm(props) {
         e.preventDefault();
     setPrice(e.target.value);
     }
-    const getColor = (e) => {
+    const getDescription = (e) => {
         e.preventDefault();
-        setColor(e.target.value);
+        setDescription(e.target.value);
     }
   return (
-    <div className='flex grid w-10'>
-        <div>createProductForm</div>
-        <input className="shadow-lg border" placeholder="id" type="number" onChange={getID}></input>
-        <input className="shadow-lg border" placeholder="price" type="number" onChange={getPrice}></input>
-        <input className="shadow-lg border" placeholder="color" type="text" onChange={getColor}></input>
-        <button onClick={sendData}>add product</button>
+    <div className='flex grid w-50'>
+        <input className="shadow-lg border rounded-lg" placeholder="id" type="number" onChange={getID}></input>
+        <div className="py-5">
+            <input className="shadow-lg border rounded-lg" placeholder="price" type="number" onChange={getPrice}></input>
+        </div>
+        <input className="shadow-lg border rounded-lg" placeholder="description" type="text" onChange={getDescription}></input>
+        <div className="py-5  justify-self-center">
+        <button className="shadow-lg border rounded-lg bg-slate-50 w-32" onClick={sendData}>add product</button>
+        </div>
     </div>
   )
 }

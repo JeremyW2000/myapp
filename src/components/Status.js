@@ -10,9 +10,9 @@ const Status = (props) => {
             console.log("Session: ", session);
             setLoginStatus(true);
         });
-    }, []);
-    return (<div>
-        {loginStatus ? (<button onClick={signout}>Logout</button>) : null}
+    }, [getSession]);
+    return (<div className="flex justify-self-center py-5">
+        {loginStatus ? (<button className="flex rounded-lg shadow-lg bg-slate-100 justify-self-center w-32" onClick={signout}>Logout</button>) : null}
     </div>)
 }
 
