@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import MyForm from "./components/MyForm";
 import { useCookies } from 'react-cookie';
+import S3 from 'react-aws-s3';
+import CreateProductForm from "./components/CreateProductForm";
 
 
 
@@ -11,13 +13,29 @@ import { useCookies } from 'react-cookie';
 
 function App() {
 
+  //s3 config
+  const config = {
+    bucketName: 'myBucket',
+    dirName: 'media', /* optional */
+    region: 'eu-west-1',
+    accessKeyId: 'JAJHAFJFHJDFJSDHFSDHFJKDSF',
+    secretAccessKey: 'jhsdf99845fd98qwed42ebdyeqwd-3r98f373f=qwrq3rfr3rf',
+    s3Url: 'https:/your-custom-s3-url.com/', /* optional */
+  }
+
+  const ReactS3Client = new S3(config);
+  const newFileName = 'test-file';
+
   const [products, setProducts] = useState([]);
   const [email, setEmail] = useState("");
-
-  
   const [cookies, setCookie, removeCookie] = useCookies(['email']);
-
-
+  const [loggedIn, setLogin] = useState(false);
+  
+  
+  // ReactS3Client
+  //   .uploadFile(file, newFileName)
+  //   .then(data => console.log(data))
+  //   .catch(err => console.error(err))
 
   //runs on reload
   useEffect(() => {
@@ -26,6 +44,7 @@ function App() {
     if (cookies["email"] != undefined) {
       setEmail(cookies["email"])
     }
+
     //getting all data
     axios.get(
       "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/products", {
@@ -37,9 +56,38 @@ function App() {
 
     //cookies for storing email of the user
     const setCookieFunction = (value) => {
-        //if (cookies["email"] === undefined){
-          setCookie("email",value);
-        //}
+      setLogin(true)
+      setEmail(value)
+      setCookie("email",value);
+    }
+
+    const postProduct = (value) => {
+      axios.post (
+        "https://tl6cquf24c.execute-api.ap-southeast-2.amazonaws.com/prod/product", value
+      )
+    }
+
+    const getNewObject = (e) => {
+      e["email"] = email
+      console.log(e)
+      postProduct(e);
+  }
+
+    const handleLogout = (e) => {
+      setLogin(false)
+      removeCookie("email")
+      setEmail(undefined)
+    }
+    const renderForm = () => {
+      if (loggedIn === false){
+        return <MyForm setEmail={setCookieFunction}/>
+      } else {
+        return <button onClick={handleLogout}>logout</button>
+      }
+    };
+
+    const uploadImage = (e) => {
+      console.log(e.target.file["name"]);
     }
 
   return (
@@ -50,12 +98,22 @@ function App() {
         </h1>
       </header>
         <div className="w-screen py-10 h-10 flex justify-center bg-slate-600 ">
-          <MyForm setEmail={setCookieFunction}/>
+          {renderForm()}
+         
         </div>
         <div className="bg-slate-400 flex justify-center">
           {products.map((product, index) => (
             <Product key={index} prod={product["ownerEmail"] === email ? product: null} />
           ))}
+        </div>
+
+        <div>
+          <input type="file" onChange={uploadImage}>
+          </input>
+          <CreateProductForm sendData={getNewObject}/>
+        </div>
+
+        <div>
         </div>
     </div>
   );
